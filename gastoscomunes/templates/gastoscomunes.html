@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Gastos Comunes</h1>
+    <!-- Contenido de la página de inicio aquí -->
+    
+    <script>
+        // Supongamos que tienes una lista de datos de gastos en JavaScript
+        const datosDeGastos = [
+            { fecha: "2023-01-15", descripcion: "Gasto 1", monto: 100 },
+            { fecha: "2023-02-10", descripcion: "Gasto 2", monto: 150 },
+            // Agrega más datos aquí
+        ];
+
+        const tablaGastos = document.getElementById("tabla-gastos");
+        const mesSelect = document.getElementById("mes");
+        const anoSelect = document.getElementById("ano");
+
+        // Función para actualizar la tabla según los filtros seleccionados
+        function actualizarTabla() {
+            const mesFiltrado = mesSelect.value;
+            const anoFiltrado = anoSelect.value;
+
+            const filasFiltradas = datosDeGastos.filter((gasto) => {
+                if (mesFiltrado && gasto.fecha.includes(anoFiltrado + "-" + mesFiltrado)) {
+                    return true;
+                } else if (!mesFiltrado && !anoFiltrado) {
+                    return true;
+                }
+                return false;
+            });
+
+            // Limpia la tabla antes de agregar las filas filtradas
+            while (tablaGastos.rows.length > 1) {
+                tablaGastos.deleteRow(1);
+            }
+
+            // Agrega las filas filtradas a la tabla
+            filasFiltradas.forEach((gasto) => {
+                const row = tablaGastos.insertRow(-1);
+                const fechaCell = row.insertCell(0);
+                fechaCell.textContent = gasto.fecha;
+                const descripcionCell = row.insertCell(1);
+                descripcionCell.textContent = gasto.descripcion;
+                const montoCell = row.insertCell(2);
+                montoCell.textContent = gasto.monto;
+            });
+        }
+
+        // Escucha eventos de cambio en los selects de mes y año
+        mesSelect.addEventListener("change", actualizarTabla);
+        anoSelect.addEventListener("change", actualizarTabla);
+
+        // Llama a la función para cargar la tabla inicialmente
+        actualizarTabla();
+    </script>
+
+{% endblock %}
+
+ 
